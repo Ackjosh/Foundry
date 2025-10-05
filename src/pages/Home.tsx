@@ -33,17 +33,20 @@ const Home = () => {
         <div className="container relative mx-auto px-4 py-24 md:py-32">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-              Solve Your Startup{" "}
-              <span className="text-gradient">Challenges</span>
+              Your AI-Powered Startup{" "}
+              <span className="text-gradient">Success Partner</span>
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              Navigate the three most critical challenges facing startups today with data-driven insights, 
-              proven strategies, and actionable solutions backed by industry research.
+              Get personalized advice from our AI chatbot trained on real startup success stories. 
+              Navigate challenges with data-driven insights and proven strategies from founders who've been there.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
+              <Button size="lg" variant="default">
+                Chat with AI Advisor <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
               <Button size="lg" asChild>
                 <Link to="/problems/product-market-fit">
-                  Explore Solutions <ArrowRight className="ml-2 h-5 w-5" />
+                  Explore Solutions
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>

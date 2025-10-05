@@ -41,12 +41,9 @@ const Home = () => {
               Navigate challenges with data-driven insights and proven strategies from founders who've been there.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button size="lg" variant="default">
-                Chat with AI Advisor <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
               <Button size="lg" asChild>
                 <Link to="/problems/product-market-fit">
-                  Explore Solutions
+                  Explore Solutions <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>

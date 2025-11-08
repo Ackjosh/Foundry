@@ -24,7 +24,7 @@ const Navigation = () => {
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2 text-xl font-bold">
               <Rocket className="h-6 w-6 text-primary" />
-              <span className="text-gradient">StartupSolve</span>
+              <span className="text-gradient">StratoGuide</span>
             </Link>
 
             <div className="hidden md:flex items-center gap-6">

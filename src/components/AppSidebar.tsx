@@ -51,7 +51,7 @@ export function AppSidebar() {
         {/* Logo */}
         <div className="flex items-center gap-2 px-4 py-6">
           <Rocket className="h-6 w-6 text-primary" />
-          {open && <span className="text-lg font-bold text-gradient">StratoGuide</span>}
+          {open && <span className="text-lg font-bold text-primary">StratoGuide</span>}
         </div>
 
         {navigation.map((section) => (

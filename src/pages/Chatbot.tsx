@@ -245,26 +245,24 @@ const Chatbot = () => {
         </ScrollArea>
 
         {/* Input */}
-        <div className="border-t border-border p-6">
+        <div className="border-t border-border p-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex gap-3 items-end">
-              <div className="flex-1 relative">
-                <Input
-                  placeholder="Ask me anything about your startup challenges..."
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  disabled={isLoading}
-                  className="pr-4 py-6 text-base"
-                />
-              </div>
+            <div className="flex gap-3 items-center">
+              <Input
+                placeholder="Ask me anything about your startup challenges..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                disabled={isLoading}
+                className="flex-1 h-11"
+              />
               <Button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
-                size="lg"
-                className="h-[52px] px-6"
+                size="icon"
+                className="h-11 w-11 flex-shrink-0"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </Button>
             </div>
             <p className="text-xs text-muted-foreground mt-2 text-center">

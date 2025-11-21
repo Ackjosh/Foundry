@@ -10,6 +10,7 @@ import ScalingTooFast from "./pages/problems/ScalingTooFast";
 import CashFlowManagement from "./pages/problems/CashFlowManagement";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Chatbot from "./pages/Chatbot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/problems/scaling-too-fast" element={<ScalingTooFast />} />
             <Route path="/problems/cash-flow-management" element={<CashFlowManagement />} />
           </Route>
+          <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

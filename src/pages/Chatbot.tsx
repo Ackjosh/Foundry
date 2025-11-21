@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Send, Bot, User, Plus, MessageSquare, Trash2 } from "lucide-react";
+import { Send, Bot, User, Plus, MessageSquare, Trash2, X } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,6 +18,7 @@ interface Chat {
 }
 
 const Chatbot = () => {
+  const navigate = useNavigate();
   const [chats, setChats] = useState<Chat[]>([
     {
       id: "1",
@@ -174,7 +176,7 @@ const Chatbot = () => {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="h-16 border-b border-border px-6 flex items-center">
+        <div className="h-16 border-b border-border px-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Bot className="h-5 w-5 text-primary" />
@@ -184,6 +186,14 @@ const Chatbot = () => {
               <p className="text-sm text-muted-foreground">Your startup success partner</p>
             </div>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/")}
+            className="h-10 w-10"
+          >
+            <X className="h-5 w-5" />
+          </Button>
         </div>
 
         {/* Messages */}

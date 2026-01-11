@@ -36,5 +36,5 @@ venv/
 # OS
 .DS_Store
 
-bun.lockb
+/bun.lockb
 components.json

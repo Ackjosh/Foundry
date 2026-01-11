@@ -26,6 +26,7 @@ function genId() {
   return count.toString();
 }
 
+// Define action types
 type ActionType = typeof actionTypes;
 
 type Action =

@@ -10,8 +10,9 @@ import ScalingChallenges from "./pages/problems/ScalingChallenges";
 import CashFlowManagement from "./pages/problems/CashFlowManagement";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
 import Chatbot from "./pages/Chatbot";
+import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 

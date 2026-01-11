@@ -77,6 +77,22 @@ const Home = () => {
               <p className="text-3xl font-bold text-foreground"></p>
               <p className="text-sm text-muted-foreground uppercase tracking-widest font-semibold">Insights from real startup journeys</p>
             </div>
+            
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border/50">
+              <div>
+                <div className="text-2xl font-bold text-primary">10,000+</div>
+                <div className="text-sm text-muted-foreground">Startups Analyzed</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">94%</div>
+                <div className="text-sm text-muted-foreground">Success Rate</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary">24/7</div>
+                <div className="text-sm text-muted-foreground">AI Support</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -87,6 +103,22 @@ const Home = () => {
           <p className="text-muted-foreground max-w-xl mx-auto text-lg italic font-serif">
             "Ideas are easy, execution is everything. We give you the roadmap."
           </p>
+          <div className="grid md:grid-cols-2 gap-4 mt-6">
+            <div className="p-4 rounded-lg bg-card border border-border/50">
+              <h3 className="font-semibold mb-2 text-foreground">Data-Driven Insights</h3>
+              <p className="text-sm text-muted-foreground">
+                Our AI processes real-world case studies and success patterns to provide you with 
+                evidence-based strategies that have proven results in similar startup scenarios.
+              </p>
+            </div>
+            <div className="p-4 rounded-lg bg-card border border-border/50">
+              <h3 className="font-semibold mb-2 text-foreground">Personalized Guidance</h3>
+              <p className="text-sm text-muted-foreground">
+                Get tailored advice specific to your industry, stage, and challenges. No generic
+                solutions - just actionable steps designed for your unique situation.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">

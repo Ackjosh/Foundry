@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 
 const Navigation = () => {
-
   return (
     <div className="flex flex-1 items-center justify-end gap-3">
       <Button variant="secondary" size="sm" asChild>

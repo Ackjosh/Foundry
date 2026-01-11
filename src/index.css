@@ -2,50 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
 
 @layer base {
   :root {
-    /* Dark theme with teal and beige accents */
-    --background: 220 20% 8%;
-    --foreground: 40 20% 92%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 95%;
 
-    --card: 220 18% 12%;
-    --card-foreground: 40 20% 92%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 220 20% 10%;
-    --popover-foreground: 40 20% 92%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 174 72% 56%;
-    --primary-foreground: 220 20% 8%;
+    --primary: 6 93% 71%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 40 40% 75%;
-    --secondary-foreground: 220 20% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 220 15% 18%;
-    --muted-foreground: 40 10% 60%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 174 60% 45%;
-    --accent-foreground: 40 20% 92%;
+    --accent: 6 93% 71%;
+    --accent-foreground: 0 0% 4%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 40 20% 92%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 174 72% 56%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 6 93% 71%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Gradient definitions */
-    --gradient-hero: linear-gradient(135deg, hsl(174 72% 56% / 0.1), hsl(40 40% 75% / 0.05));
-    --gradient-card: linear-gradient(180deg, hsl(220 18% 12%), hsl(220 18% 10%));
+    --gradient-hero: linear-gradient(135deg, hsl(6 93% 71% / 0.05), hsl(0 0% 7% / 0.5));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 5%));
     
     /* Shadows */
-    --shadow-glow: 0 0 30px hsl(174 72% 56% / 0.15);
-    --shadow-soft: 0 4px 20px hsl(220 20% 4% / 0.4);
+    --shadow-glow: 0 0 30px hsl(6 93% 71% / 0.1);
+    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.5);
   }
 }
 
@@ -55,11 +51,11 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-geist;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-bold tracking-tight font-geist;
   }
 }
 

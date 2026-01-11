@@ -12,7 +12,7 @@ const Register = () => {
         <div className="mb-8 text-center">
           <Link to="/" className="inline-flex items-center gap-2 text-2xl font-bold">
             <Rocket className="h-8 w-8 text-primary" />
-            <span className="text-gradient">StartupSolve</span>
+            <span className="text-primary">Foundry</span>
           </Link>
         </div>
 

@@ -3,23 +3,17 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "./components/Navigation";
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import ProductMarketFit from "./pages/problems/ProductMarketFit";
-import ScalingTooFast from "./pages/problems/ScalingTooFast";
+import ScalingChallenges from "./pages/problems/ScalingChallenges";
 import CashFlowManagement from "./pages/problems/CashFlowManagement";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import Chatbot from "./pages/Chatbot";
 
 const queryClient = new QueryClient();
-
-const Layout = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen">
-    <Navigation />
-    {children}
-  </div>
-);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -28,10 +22,13 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout><Home /></Layout>} />
-          <Route path="/problems/product-market-fit" element={<Layout><ProductMarketFit /></Layout>} />
-          <Route path="/problems/scaling-too-fast" element={<Layout><ScalingTooFast /></Layout>} />
-          <Route path="/problems/cash-flow-management" element={<Layout><CashFlowManagement /></Layout>} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/problems/product-market-fit" element={<ProductMarketFit />} />
+            <Route path="/problems/scaling-challenges" element={<ScalingChallenges />} />
+            <Route path="/problems/cash-flow-management" element={<CashFlowManagement />} />
+          </Route>
+          <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

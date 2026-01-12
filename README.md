@@ -22,7 +22,7 @@ A full-stack intelligent advisory platform that helps entrepreneurs navigate com
 
 -----
 
-## Introduction
+## 📖 Introduction
 
 Foundry addresses a critical challenge faced by entrepreneurs: finding reliable, actionable advice for navigating the complex startup landscape. This platform leverages cutting-edge Retrieval-Augmented Generation (RAG) technology to provide personalized, data-driven guidance based on real case studies and validated strategies.
 
@@ -30,12 +30,12 @@ The system combines a modern, responsive React frontend with an intelligent Pyth
 
 -----
 
-## Features
+## ✨ Features
 
 #### For Entrepreneurs (Web Application)
 
 - **AI Chatbot Advisor**: Interactive conversational interface powered by LangChain and large language models for personalized guidance
-- **Multi_LLM interface**: Uses Groq AI as a fallback LLM after Gemini API rate limits to prevent stalling the responses
+- **Multi-LLM interface**: Uses Groq AI as a fallback LLM after Gemini API rate limits to prevent stalling the responses
 - **Multi-Chat Sessions**: Manage multiple conversation threads simultaneously to organize different topics
 - **Problem-Specific Solutions**: Dedicated pages for common startup challenges:
   - Product-Market Fit
@@ -55,7 +55,7 @@ The system combines a modern, responsive React frontend with an intelligent Pyth
 
 -----
 
-## Technology Stack
+## 🏗️ Technology Stack
 
 ### Frontend
 - **React 18** with TypeScript
@@ -79,7 +79,7 @@ The system combines a modern, responsive React frontend with an intelligent Pyth
 
 -----
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 Foundry/
@@ -110,7 +110,7 @@ Foundry/
 └── public/                      # Static assets
 ```
 
-## 🚀 Getting Started
+## ⚙️ Getting Started
 
 ### Prerequisites
 
@@ -121,7 +121,7 @@ Foundry/
   - Google Generative AI (Gemini) or
   - Groq AI
 
-### Installation
+### 🚀 Installation
 
 #### 1. Clone the Repository
 
@@ -134,10 +134,10 @@ cd Foundry
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Start development server
-bun run dev
+npm run dev
 ```
 
 #### 3. Backend Setup
@@ -182,7 +182,7 @@ The API will be available at `http://localhost:8000`
 
 -----
 
-## Usage
+## 💬 Usage
 
 #### For Entrepreneurs:
 
@@ -203,7 +203,7 @@ The API will be available at `http://localhost:8000`
 4. Add new problem pages in `src/pages/problems/` for additional categories
 5. Use the development scripts for building and testing
 
-## API Endpoints
+## 📡 API Endpoints
 
 ### POST `/chatbot`
 Query the AI advisor with a startup-related question.
@@ -234,11 +234,12 @@ Health check endpoint to verify API availability.
 
 -----
 
-## Advantages
+## ✅ Advantages
 
 - **Data-Driven Insights**: Responses are grounded in real startup case studies and validated strategies, not generic advice
 - **Instant Access to Knowledge**: Get immediate answers without searching through multiple resources or hiring expensive consultants
 - **Scalable AI Architecture**: Built on modern RAG technology that can easily expand to include more knowledge sources
+- **User Persistence**: Chat history is stored and syncs across devices
 - **Context-Aware Responses**: The system retrieves the most relevant information for each specific query
 - **Beautiful User Experience**: Modern, intuitive interface built with industry-standard design components
 - **Fast Performance**: Optimized vector search and asynchronous processing ensure quick response times
@@ -248,12 +249,11 @@ Health check endpoint to verify API availability.
 
 -----
 
-## Limitations
+## ⚠️ Limitations
 
 - **LLM Dependency**: Requires active API keys for Google Generative AI or Groq, which may incur costs
 - **Knowledge Base Scope**: Accuracy and relevance depend on the quality and coverage of documents in the knowledge base
 - **No Real-Time Updates**: Knowledge base must be manually updated and re-indexed to include new information
-- **No User Persistence**: Chat history is stored locally in browser and doesn't sync across devices
 - **Limited Authentication**: Current version has basic authentication pages without full user management
 - **English Language Only**: Optimized for English content; multilingual support not implemented
 - **No Voice Interface**: Text-only interaction; voice input/output not supported
@@ -261,7 +261,7 @@ Health check endpoint to verify API availability.
 
 -----
 
-## Development
+## 🛠️ Development
 
 ### Frontend Scripts
 
@@ -298,7 +298,7 @@ python 04_rag_chain.py
 
 -----
 
-## Customization
+## 🎨 Customization
 
 ### Adding New Problem Categories
 
@@ -323,7 +323,7 @@ python 04_rag_chain.py
 
 -----
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome to enhance the functionality and design of Foundry! Here's how you can help:
 
@@ -358,11 +358,11 @@ Contributions are welcome to enhance the functionality and design of Foundry! He
 
 -----
 
-## Contact
+## 📞 Contact
 
 For questions, suggestions, or collaboration opportunities:
 
-- **GitHub**: [Open an issue](https://github.com/Ackjosh/Foundry)
+- **GitHub**: [Ackjosh](https://github.com/Ackjosh/Foundry)
 - **Email**: akshatdjoshi@gmail.com
 
 -----

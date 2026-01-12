@@ -32,11 +32,11 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background selection:bg-primary/20">
+    <div className="min-h-screen bg-background selection:bg-primary/20 w-full">
       <section className="relative pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         
-        <div className="container mx-auto px-6 text-center">
+        <div className="w-full px-6 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-8 animate-fade-in">
             <Sparkles className="h-3 w-3" /> Powered by real startup case studies
           </div>
@@ -77,27 +77,11 @@ const Home = () => {
               <p className="text-3xl font-bold text-foreground"></p>
               <p className="text-sm text-muted-foreground uppercase tracking-widest font-semibold">Insights from real startup journeys</p>
             </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-border/50">
-              <div>
-                <div className="text-2xl font-bold text-primary">10,000+</div>
-                <div className="text-sm text-muted-foreground">Startups Analyzed</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-primary">94%</div>
-                <div className="text-sm text-muted-foreground">Success Rate</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-primary">24/7</div>
-                <div className="text-sm text-muted-foreground">AI Support</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 container mx-auto px-6">
+      <section className="py-24 w-full px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">The Foundry Advantage</h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-lg italic font-serif">
@@ -142,7 +126,7 @@ const Home = () => {
       </section>
 
       <section className="py-24 bg-muted/20 border-y border-border/50">
-        <div className="container mx-auto px-6">
+        <div className="w-full px-6">
           <div className="max-w-4xl mx-auto mb-16">
             <h2 className="text-3xl font-bold mb-4 tracking-tight">Strategic Intelligence Pillars</h2>
             <p className="text-muted-foreground text-lg">
@@ -176,7 +160,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-32 container mx-auto px-6">
+      <section className="py-32 w-full px-6">
         <div className="relative p-16 md:p-24 rounded-[4rem] bg-indigo-600 overflow-hidden text-center text-white shadow-2xl">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
           
@@ -199,7 +183,7 @@ const Home = () => {
       </section>
 
       <footer className="py-16 border-t border-border/50 bg-background">
-        <div className="container mx-auto px-6 text-center">
+        <div className="w-full px-6 text-center">
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
             Foundry
           </p>

@@ -8,7 +8,7 @@ const ScalingChallengesArticle = () => {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 flex flex-col gap-10">
       <header className="py-20 border-b bg-muted/30">
-        <div className="container mx-auto px-6 max-w-4xl text-center">
+        <div className="w-full px-6 text-center">
           <div className="flex justify-center mb-6">
             <span className="px-3 py-1 text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary rounded-full">
               Founders Strategy Guide
@@ -32,9 +32,9 @@ const ScalingChallengesArticle = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-12 max-w-4xl flex flex-col gap-20">
+      <main className="w-full px-6 py-12 flex flex-col gap-20">
         
-        <section className="flex flex-col md:flex-row gap-12 items-center">
+        <section className="flex flex-col md:flex-row gap-12 items-center max-w-4xl mx-auto w-full px-6">
           <div className="md:w-1/2 prose prose-lg dark:prose-invert">
             <h2 className="text-3xl font-bold mb-6 italic">The Scaling Paradox</h2>
             <p>

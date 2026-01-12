@@ -9,7 +9,7 @@ const Layout = () => {
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         
-        <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 flex-col w-full">
           <header className="sticky top-0 z-40 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex h-14 items-center gap-4 px-4">
               <SidebarTrigger className="-ml-1" />
@@ -17,7 +17,7 @@ const Layout = () => {
             </div>
           </header>
 
-          <main className="flex-1">
+          <main className="flex-1 w-full">
             <Outlet />
           </main>
         </div>

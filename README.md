@@ -362,7 +362,7 @@ Contributions are welcome to enhance the functionality and design of Foundry! He
 
 For questions, suggestions, or collaboration opportunities:
 
-- **GitHub**: [Ackjosh](https://github.com/Ackjosh/Foundry)
+- **GitHub**: [Ackjosh](https://github.com/Ackjosh)
 - **Email**: akshatdjoshi@gmail.com
 
 -----

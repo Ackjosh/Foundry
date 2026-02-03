@@ -12,7 +12,7 @@ const ProductMarketFitArticle = () => {
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 flex flex-col gap-10">
       <header className="py-20 border-b bg-muted/30">
-        <div className="w-full px-6 text-center">
+        <div className="w-full max-w-5xl mx-auto px-8 md:px-12 lg:px-16 text-center">
           <div className="flex justify-center mb-6">
             <span className="px-3 py-1 text-xs font-bold uppercase tracking-widest bg-primary/10 text-primary rounded-full">
               Founders Strategy Guide
@@ -37,8 +37,8 @@ const ProductMarketFitArticle = () => {
         </div>
       </header>
 
-      <main className="w-full px-6 py-12 flex flex-col gap-20">
-        <section className="prose prose-lg dark:prose-invert max-w-none max-w-4xl mx-auto w-full px-6">
+      <main className="w-full max-w-5xl mx-auto px-8 md:px-12 lg:px-16 py-12 flex flex-col gap-20">
+        <section className="prose prose-lg dark:prose-invert max-w-none max-w-4xl mx-auto w-full">
           <h2 className="text-3xl font-bold mb-6">What is Product-Market Fit?</h2>
           <p>
             At its core, <strong> Product-Market Fit (PMF)</strong> is the alignment between your product or service and the needs of your target market. 
@@ -186,7 +186,7 @@ const ProductMarketFitArticle = () => {
           </div>
         </section>
 
-        <section className="prose prose-lg dark:prose-invert max-w-none max-w-4xl mx-auto w-full px-6 border-t">
+        <section className="prose prose-lg dark:prose-invert max-w-none max-w-4xl mx-auto w-full border-t">
           <h2 className="text-3xl font-bold mb-8 mt-5">Common Inquiries</h2>
           <div className="grid gap-8">
             <div>

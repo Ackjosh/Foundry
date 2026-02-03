@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Send, Bot, User, Plus, MessageSquare, Trash2, X, AlertCircle } from "lucide-react";
+import { UserButton } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -79,7 +80,6 @@ const Chatbot = () => {
     setInput("");
     setIsLoading(true);
 
-    // 1. Immediately show user message in the UI
     setChats(prev => prev.map(chat => 
       chat.id === activeChatId 
         ? { ...chat, messages: [...chat.messages, { role: "user", content: userMessage }] }
@@ -87,7 +87,6 @@ const Chatbot = () => {
     ));
 
     try {
-      // 2. Connect to your FastAPI Backend
       const response = await fetch("http://127.0.0.1:8000/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -98,12 +97,10 @@ const Chatbot = () => {
 
       const data = await response.json();
 
-      // 3. Update UI with the AI response
       setChats(prev => prev.map(chat => 
         chat.id === activeChatId 
           ? { 
               ...chat, 
-              // If it's the first real question, rename the chat title
               title: chat.messages.length <= 2 ? userMessage.substring(0, 20) + "..." : chat.title,
               messages: [...chat.messages, { role: "assistant", content: data.answer }] 
             }
@@ -130,7 +127,6 @@ const Chatbot = () => {
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden">
-      {/* Sidebar */}
       <div className="w-64 border-r border-border flex flex-col bg-muted/20">
         <div className="p-4 h-20 flex items-center justify-center">
           <Button onClick={createNewChat} className="w-full shadow-sm" variant="default">
@@ -185,9 +181,7 @@ const Chatbot = () => {
         </div>
       </div>
 
-      {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <div className="h-20 border-b border-border px-8 flex items-center justify-between bg-background/50 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shadow-inner">
@@ -201,12 +195,14 @@ const Chatbot = () => {
               </div>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
-            <X className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-3">
+            <UserButton />
+            <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
-        {/* Messages */}
         <ScrollArea className="flex-1 p-8" ref={scrollRef}>
           <div className="max-w-3xl mx-auto space-y-8">
             {activeChat?.messages.map((message, index) => (
@@ -256,7 +252,6 @@ const Chatbot = () => {
           </div>
         </ScrollArea>
 
-        {/* Input Area */}
         <div className="border-t bg-muted/20 p-6">
           <div className="max-w-3xl mx-auto">
             <div className="relative flex items-center">

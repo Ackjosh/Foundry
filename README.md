@@ -66,6 +66,7 @@ The system combines a modern, responsive React frontend with an intelligent Pyth
 - **TanStack Query** for data fetching
 - **Lucide React** for icons
 - **React Markdown** for formatted responses
+- **Clerk** for authentication and user management
 
 ### Backend
 - **FastAPI** for RESTful API

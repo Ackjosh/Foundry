@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chatbot from "./pages/Chatbot";
 import NotFound from "./pages/NotFound";
+import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
 
 const queryClient = new QueryClient();
@@ -29,10 +30,21 @@ const App = () => (
             <Route path="/problems/scaling-challenges" element={<ScalingChallenges />} />
             <Route path="/problems/cash-flow-management" element={<CashFlowManagement />} />
           </Route>
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route
+            path="/chatbot"
+            element={
+              <>
+                <SignedIn>
+                  <Chatbot />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

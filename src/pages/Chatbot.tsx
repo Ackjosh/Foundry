@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Send, Bot, User, Plus, MessageSquare, Trash2, X, AlertCircle } from "lucide-react";
-import { UserButton } from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -19,26 +19,73 @@ interface Chat {
   messages: Message[];
 }
 
+const API_BASE = "http://127.0.0.1:8000";
+
 const Chatbot = () => {
   const navigate = useNavigate();
-  const [chats, setChats] = useState<Chat[]>([
-    {
-      id: "1",
-      title: "Getting Started",
-      messages: [
-        {
-          role: "assistant",
-          content: "Hi! I'm your AI advisor. How can I help you solve your startup challenges today?",
-        },
-      ],
-    },
-  ]);
-  const [activeChatId, setActiveChatId] = useState("1");
+  const { user } = useUser();
+  const userId = user?.id;
+
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [activeChatId, setActiveChatId] = useState<string>("");
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
+
+  // Load chat history on mount
+  useEffect(() => {
+    const loadChatHistory = async () => {
+      if (!userId) return;
+
+      try {
+        setIsLoadingHistory(true);
+        const response = await fetch(`${API_BASE}/chat-history/${userId}`);
+        const data = await response.json();
+
+        if (data.sessions && data.sessions.length > 0) {
+          // Load messages for each session
+          const chatsWithMessages = await Promise.all(
+            data.sessions.map(async (session: any) => {
+              const msgResponse = await fetch(`${API_BASE}/chat/${session.id}/messages`);
+              const msgData = await msgResponse.json();
+              return {
+                id: session.id,
+                title: session.title,
+                messages: msgData.messages || [],
+              };
+            })
+          );
+          setChats(chatsWithMessages);
+          setActiveChatId(chatsWithMessages[0].id);
+        } else {
+          // Create initial chat if none exist
+          await createNewChat();
+        }
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+        // Fallback to default chat
+        const defaultChat: Chat = {
+          id: Date.now().toString(),
+          title: "Getting Started",
+          messages: [
+            {
+              role: "assistant",
+              content: "Hi! I'm your AI advisor. How can I help you solve your startup challenges today?",
+            },
+          ],
+        };
+        setChats([defaultChat]);
+        setActiveChatId(defaultChat.id);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    };
+
+    loadChatHistory();
+  }, [userId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -49,67 +96,116 @@ const Chatbot = () => {
     }
   }, [activeChat?.messages, isLoading]);
 
-  const createNewChat = () => {
-    const newChat: Chat = {
-      id: Date.now().toString(),
-      title: `New Strategy Chat`,
-      messages: [
-        {
-          role: "assistant",
-          content: "New session started. What's on your mind?",
-        },
-      ],
-    };
-    setChats([...chats, newChat]);
-    setActiveChatId(newChat.id);
+  const createNewChat = async () => {
+    if (!userId) return;
+
+    const newSessionId = Date.now().toString();
+    const newTitle = "New Strategy Chat";
+
+    try {
+      // Create session in database
+      await fetch(`${API_BASE}/chat/new`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          session_id: newSessionId,
+          title: newTitle,
+        }),
+      });
+
+      // Add to local state
+      const newChat: Chat = {
+        id: newSessionId,
+        title: newTitle,
+        messages: [
+          {
+            role: "assistant",
+            content: "New session started. What's on your mind?",
+          },
+        ],
+      };
+
+      setChats([newChat, ...chats]);
+      setActiveChatId(newChat.id);
+    } catch (error) {
+      console.error("Failed to create new chat:", error);
+    }
   };
 
-  const deleteChat = (chatId: string) => {
-    if (chats.length === 1) return;
-    const newChats = chats.filter((chat) => chat.id !== chatId);
-    setChats(newChats);
-    if (activeChatId === chatId) {
-      setActiveChatId(newChats[0].id);
+  const deleteChat = async (chatId: string) => {
+    if (chats.length === 1 || !userId) return;
+
+    try {
+      // Delete from database
+      await fetch(`${API_BASE}/chat/${chatId}?user_id=${userId}`, {
+        method: "DELETE",
+      });
+
+      // Remove from local state
+      const newChats = chats.filter((chat) => chat.id !== chatId);
+      setChats(newChats);
+      if (activeChatId === chatId) {
+        setActiveChatId(newChats[0].id);
+      }
+    } catch (error) {
+      console.error("Failed to delete chat:", error);
     }
   };
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading || !activeChat) return;
+    if (!input.trim() || isLoading || !activeChat || !userId) return;
 
     const userMessage = input.trim();
     setInput("");
     setIsLoading(true);
 
-    setChats(prev => prev.map(chat => 
-      chat.id === activeChatId 
+    // Optimistically add user message to UI
+    setChats(prev => prev.map(chat =>
+      chat.id === activeChatId
         ? { ...chat, messages: [...chat.messages, { role: "user", content: userMessage }] }
         : chat
     ));
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/chatbot", {
+      const response = await fetch(`${API_BASE}/chatbot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userMessage }),
+        body: JSON.stringify({
+          query: userMessage,
+          user_id: userId,
+          session_id: activeChatId,
+        }),
       });
 
       if (!response.ok) throw new Error("Server connection failed");
 
       const data = await response.json();
 
-      setChats(prev => prev.map(chat => 
-        chat.id === activeChatId 
-          ? { 
-              ...chat, 
-              title: chat.messages.length <= 2 ? userMessage.substring(0, 20) + "..." : chat.title,
-              messages: [...chat.messages, { role: "assistant", content: data.answer }] 
-            }
+      // Update chat with AI response and auto-update title for new chats
+      setChats(prev => prev.map(chat =>
+        chat.id === activeChatId
+          ? {
+            ...chat,
+            title: chat.messages.length <= 2 ? userMessage.substring(0, 30) + "..." : chat.title,
+            messages: [...chat.messages, { role: "assistant", content: data.answer }]
+          }
           : chat
       ));
+
+      // Update title in database if it's the first message
+      if (activeChat.messages.length <= 2) {
+        const newTitle = userMessage.substring(0, 30) + "...";
+        await fetch(`${API_BASE}/chat/${activeChatId}/title`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: newTitle }),
+        });
+      }
     } catch (error) {
       console.error("RAG Error:", error);
-      setChats(prev => prev.map(chat => 
-        chat.id === activeChatId 
+      setChats(prev => prev.map(chat =>
+        chat.id === activeChatId
           ? { ...chat, messages: [...chat.messages, { role: "assistant", content: "⚠️ **Connection Error**: I couldn't reach the advisor. Please ensure your Python backend is running at `localhost:8000`." }] }
           : chat
       ));
@@ -142,9 +238,8 @@ const Chatbot = () => {
             {chats.map((chat) => (
               <div
                 key={chat.id}
-                className={`group flex items-center gap-2 rounded-xl px-3 py-2.5 cursor-pointer transition-all ${
-                  activeChatId === chat.id ? "bg-primary/10 text-primary" : "hover:bg-muted"
-                }`}
+                className={`group flex items-center gap-2 rounded-xl px-3 py-2.5 cursor-pointer transition-all ${activeChatId === chat.id ? "bg-primary/10 text-primary" : "hover:bg-muted"
+                  }`}
                 onClick={() => setActiveChatId(chat.id)}
               >
                 <MessageSquare className="h-4 w-4 flex-shrink-0" />
@@ -208,9 +303,8 @@ const Chatbot = () => {
             {activeChat?.messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex gap-4 ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex gap-4 ${message.role === "user" ? "justify-end" : "justify-start"
+                  }`}
               >
                 {message.role === "assistant" && (
                   <div className="h-10 w-10 rounded-lg bg-muted border flex items-center justify-center flex-shrink-0">
@@ -218,11 +312,10 @@ const Chatbot = () => {
                   </div>
                 )}
                 <div
-                  className={`rounded-2xl px-6 py-4 shadow-sm border ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-card text-card-foreground border-border"
-                  } max-w-[85%]`}
+                  className={`rounded-2xl px-6 py-4 shadow-sm border ${message.role === "user"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card text-card-foreground border-border"
+                    } max-w-[85%]`}
                 >
                   <div className={`text-sm leading-relaxed prose prose-sm ${message.role === 'user' ? 'prose-invert' : 'dark:prose-invert'}`}>
                     <ReactMarkdown>{message.content}</ReactMarkdown>

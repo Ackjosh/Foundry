@@ -12,3 +12,6 @@ langchain-groq
 python-dotenv
 langchain-google-genai
 fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary

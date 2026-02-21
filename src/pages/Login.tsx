@@ -54,7 +54,7 @@ const Login = () => {
               afterSignInUrl="/chatbot" 
             />
           </div>
-          <div className="border-t border-slate-100 bg-slate-50/80 p-4 text-center">
+          <div className="border-t border-slate-100 bg-slate-50/80 p-4 text-center rounded-b-3xl">
             <p className="text-sm text-slate-600">
               Haven't signed up?{" "}
               <Link to="/register" className="text-indigo-600 font-semibold hover:underline">

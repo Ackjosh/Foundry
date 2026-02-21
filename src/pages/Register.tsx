@@ -1,6 +1,6 @@
 import { SignUp } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles, Rocket } from "lucide-react";
 
 const Register = () => {
   return (
@@ -17,14 +17,18 @@ const Register = () => {
       
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-6">
-            <Sparkles className="h-3 w-3" /> Join the Founders
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest">
+              <Sparkles className="h-3 w-3" /> Join the Founders
+            </div>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3 leading-[1.1] text-foreground">
-            Start Your{" "}
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3 leading-[1.1] text-foreground flex items-center justify-center gap-3 whitespace-nowrap">
+            <Rocket className="h-8 w-8 md:h-10 md:w-10 text-primary flex-shrink-0" />
+            <span>Start Your{" "}
             <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 bg-clip-text text-transparent">
               Journey
+            </span>
             </span>
           </h1>
           
@@ -33,7 +37,7 @@ const Register = () => {
           </p>
         </div>
 
-        <div className="w-full bg-white rounded-3xl shadow-2xl border border-transparent mx-4">
+        <div className="w-full bg-white rounded-3xl shadow-2xl border border-transparent">
           <div className="p-6">
             <SignUp 
               appearance={{
@@ -55,7 +59,7 @@ const Register = () => {
               afterSignUpUrl="/chatbot" 
             />
           </div>
-          <div className="border-t border-slate-100 bg-slate-50/80 p-4 text-center">
+          <div className="border-t border-slate-100 bg-slate-50/80 p-4 text-center rounded-b-3xl">
             <p className="text-sm text-slate-600">
               Already have an account?{" "}
               <Link to="/login" className="text-indigo-600 font-semibold hover:underline">

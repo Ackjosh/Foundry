@@ -255,7 +255,6 @@ Health check endpoint to verify API availability.
 - **LLM Dependency**: Requires active API keys for Google Generative AI or Groq, which may incur costs
 - **Knowledge Base Scope**: Accuracy and relevance depend on the quality and coverage of documents in the knowledge base
 - **No Real-Time Updates**: Knowledge base must be manually updated and re-indexed to include new information
-- **Limited Authentication**: Current version has basic authentication pages without full user management
 - **English Language Only**: Optimized for English content; multilingual support not implemented
 - **No Voice Interface**: Text-only interaction; voice input/output not supported
 - **Internet Required**: Both API calls and frontend require active internet connection

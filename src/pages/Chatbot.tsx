@@ -31,67 +31,118 @@ const Chatbot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const activeChat = chats.find((chat) => chat.id === activeChatId);
 
-  // Load chat history on mount
   useEffect(() => {
+    let mounted = true;
     const loadChatHistory = async () => {
       if (!userId) return;
 
       try {
         setIsLoadingHistory(true);
-        const response = await fetch(`${API_BASE}/chat-history/${userId}`);
+        setApiError(null);
+        const controller = new AbortController();
+        const response = await fetch(`${API_BASE}/chat-history/${userId}`, {
+          signal: controller.signal,
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        
+        if (!mounted) return;
 
         if (data.sessions && data.sessions.length > 0) {
-          // Load messages for each session
           const chatsWithMessages = await Promise.all(
-            data.sessions.map(async (session: any) => {
-              const msgResponse = await fetch(`${API_BASE}/chat/${session.id}/messages`);
-              const msgData = await msgResponse.json();
-              return {
-                id: session.id,
-                title: session.title,
-                messages: msgData.messages || [],
-              };
+            data.sessions.slice(0, 10).map(async (session: any) => { // Limit to 10 chats max
+              try {
+                const msgResponse = await fetch(`${API_BASE}/chat/${session.id}/messages`, {
+                  signal: controller.signal,
+                  headers: { 'Content-Type': 'application/json' }
+                });
+                if (!msgResponse.ok) throw new Error('Failed to fetch messages');
+                const msgData = await msgResponse.json();
+                return {
+                  id: session.id,
+                  title: session.title || 'Untitled Chat',
+                  messages: (msgData.messages || []).slice(-50), // Limit to last 50 messages per chat
+                };
+              } catch (err) {
+                console.warn(`Failed to load chat ${session.id}:`, err);
+                return {
+                  id: session.id,
+                  title: session.title || 'Untitled Chat',
+                  messages: [],
+                };
+              }
             })
           );
-          setChats(chatsWithMessages);
-          setActiveChatId(chatsWithMessages[0].id);
+          if (mounted) {
+            setChats(chatsWithMessages);
+            setActiveChatId(chatsWithMessages[0]?.id || '');
+          }
         } else {
-          // Create initial chat if none exist
-          await createNewChat();
+          if (mounted) {
+            await createNewChat();
+          }
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to load chat history:", error);
-        // Fallback to default chat
-        const defaultChat: Chat = {
-          id: Date.now().toString(),
-          title: "Getting Started",
-          messages: [
-            {
-              role: "assistant",
-              content: "Hi! I'm your AI advisor. How can I help you solve your startup challenges today?",
-            },
-          ],
-        };
-        setChats([defaultChat]);
-        setActiveChatId(defaultChat.id);
+        if (mounted) {
+          setApiError(error.message || 'Failed to connect to backend');
+          const defaultChat: Chat = {
+            id: Date.now().toString(),
+            title: "Getting Started",
+            messages: [
+              {
+                role: "assistant",
+                content: "Hi! I'm your AI advisor. I'm currently having trouble connecting to the backend. Please ensure your Python server is running on port 8000.",
+              },
+            ],
+          };
+          setChats([defaultChat]);
+          setActiveChatId(defaultChat.id);
+        }
       } finally {
-        setIsLoadingHistory(false);
+        if (mounted) {
+          setIsLoadingHistory(false);
+        }
       }
     };
 
-    loadChatHistory();
+    if (userId) {
+      loadChatHistory();
+    }
+    
+    return () => {
+      mounted = false;
+    };
   }, [userId]);
+
+  // Cleanup effect to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
       const scrollContainer = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
       if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        // Use requestAnimationFrame to prevent blocking
+        requestAnimationFrame(() => {
+          scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        });
       }
     }
   }, [activeChat?.messages, isLoading]);
@@ -103,10 +154,11 @@ const Chatbot = () => {
     const newTitle = "New Strategy Chat";
 
     try {
-      // Create session in database
+      const controller = new AbortController();
       await fetch(`${API_BASE}/chat/new`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
         body: JSON.stringify({
           user_id: userId,
           session_id: newSessionId,
@@ -114,7 +166,6 @@ const Chatbot = () => {
         }),
       });
 
-      // Add to local state
       const newChat: Chat = {
         id: newSessionId,
         title: newTitle,
@@ -126,10 +177,11 @@ const Chatbot = () => {
         ],
       };
 
-      setChats([newChat, ...chats]);
+      setChats(prev => [newChat, ...prev.slice(0, 9)]); // Limit to 10 chats max
       setActiveChatId(newChat.id);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to create new chat:", error);
+      setApiError(error.message || 'Failed to create new chat');
     }
   };
 
@@ -137,30 +189,37 @@ const Chatbot = () => {
     if (chats.length === 1 || !userId) return;
 
     try {
-      // Delete from database
+      const controller = new AbortController();
       await fetch(`${API_BASE}/chat/${chatId}?user_id=${userId}`, {
         method: "DELETE",
+        signal: controller.signal,
       });
 
-      // Remove from local state
       const newChats = chats.filter((chat) => chat.id !== chatId);
       setChats(newChats);
-      if (activeChatId === chatId) {
+      if (activeChatId === chatId && newChats.length > 0) {
         setActiveChatId(newChats[0].id);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to delete chat:", error);
+      setApiError(error.message || 'Failed to delete chat');
     }
   };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading || !activeChat || !userId) return;
 
+    // Cancel previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
     const userMessage = input.trim();
     setInput("");
     setIsLoading(true);
+    setApiError(null);
+    abortControllerRef.current = new AbortController();
 
-    // Optimistically add user message to UI
     setChats(prev => prev.map(chat =>
       chat.id === activeChatId
         ? { ...chat, messages: [...chat.messages, { role: "user", content: userMessage }] }
@@ -171,6 +230,7 @@ const Chatbot = () => {
       const response = await fetch(`${API_BASE}/chatbot`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: abortControllerRef.current.signal,
         body: JSON.stringify({
           query: userMessage,
           user_id: userId,
@@ -182,7 +242,6 @@ const Chatbot = () => {
 
       const data = await response.json();
 
-      // Update chat with AI response and auto-update title for new chats
       setChats(prev => prev.map(chat =>
         chat.id === activeChatId
           ? {
@@ -193,7 +252,6 @@ const Chatbot = () => {
           : chat
       ));
 
-      // Update title in database if it's the first message
       if (activeChat.messages.length <= 2) {
         const newTitle = userMessage.substring(0, 30) + "...";
         await fetch(`${API_BASE}/chat/${activeChatId}/title`, {
@@ -202,15 +260,28 @@ const Chatbot = () => {
           body: JSON.stringify({ title: newTitle }),
         });
       }
-    } catch (error) {
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Request was cancelled');
+        return;
+      }
+      
       console.error("RAG Error:", error);
+      setApiError(error.message || 'Connection failed');
       setChats(prev => prev.map(chat =>
         chat.id === activeChatId
-          ? { ...chat, messages: [...chat.messages, { role: "assistant", content: "⚠️ **Connection Error**: I couldn't reach the advisor. Please ensure your Python backend is running at `localhost:8000`." }] }
+          ? { 
+            ...chat, 
+            messages: [...chat.messages, { 
+              role: "assistant", 
+              content: `⚠️ **Connection Error**: ${error.message || 'I couldn\'t reach the advisor'}. Please ensure your Python backend is running at \`localhost:8000\`.` 
+            }] 
+          }
           : chat
       ));
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   };
 

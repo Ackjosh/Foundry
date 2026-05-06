@@ -24,7 +24,6 @@ class ChatSession(Base):
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationship with messages
     messages = relationship("Message", back_populates="session", cascade="all, delete-orphan")
 
     def to_dict(self):
@@ -47,7 +46,6 @@ class Message(Base):
     content = Column(Text, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow, index=True)
     
-    # Relationship with session
     session = relationship("ChatSession", back_populates="messages")
 
     def to_dict(self):
@@ -59,7 +57,6 @@ class Message(Base):
         }
 
 
-# Database connection
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
@@ -69,7 +66,6 @@ if not DATABASE_URL:
         "Example: DATABASE_URL=postgresql://user:password@host:port/database"
     )
 
-# Create engine and session factory
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -90,6 +86,5 @@ def get_db():
 
 
 if __name__ == "__main__":
-    # Test database connection and create tables
     print("Testing database connection...")
     init_db()

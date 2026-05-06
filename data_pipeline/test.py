@@ -3,12 +3,10 @@ from dotenv import load_dotenv
 import os
 import time
 
-# Load environment variables
 load_dotenv()
 
 print("Starting connection test...")
 
-# Use DATABASE_URL from .env file
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL not found in .env file")

@@ -18,13 +18,11 @@ def test_message_limit():
     """Test that only MAX_MESSAGES_PER_SESSION messages are kept per session."""
     print("\n🧪 Testing message limit per session...")
     
-    # Create a test session
     user_id = f"test_user_{uuid.uuid4()}"
     session_id = f"test_session_{uuid.uuid4()}"
     
     create_chat_session(user_id, session_id, "Test Message Limit")
     
-    # Add more than MAX_MESSAGES_PER_SESSION messages
     num_messages = MAX_MESSAGES_PER_SESSION + 50
     print(f"   Adding {num_messages} messages...")
     
@@ -34,7 +32,6 @@ def test_message_limit():
         content = f"Test message {i}"
         save_message(session_id, message_id, role, content)
     
-    # Verify only MAX_MESSAGES_PER_SESSION messages remain
     messages = get_session_messages(session_id)
     message_count = len(messages)
     
@@ -43,7 +40,6 @@ def test_message_limit():
     
     if message_count <= MAX_MESSAGES_PER_SESSION:
         print("✅ Message limit test PASSED")
-        # Verify the latest messages are kept
         if messages[-1]['content'] == f"Test message {num_messages - 1}":
             print("✅ Latest messages are preserved")
         else:
@@ -58,10 +54,8 @@ def test_session_limit():
     """Test that only MAX_SESSIONS_PER_USER sessions are kept per user."""
     print("\n🧪 Testing session limit per user...")
     
-    # Create a test user
     user_id = f"test_user_{uuid.uuid4()}"
     
-    # Create more than MAX_SESSIONS_PER_USER sessions
     num_sessions = MAX_SESSIONS_PER_USER + 10
     print(f"   Creating {num_sessions} sessions...")
     
@@ -69,7 +63,6 @@ def test_session_limit():
         session_id = f"session_{i}_{uuid.uuid4()}"
         create_chat_session(user_id, session_id, f"Test Session {i}")
     
-    # Verify only MAX_SESSIONS_PER_USER sessions remain
     sessions = get_user_sessions(user_id)
     session_count = len(sessions)
     
@@ -78,7 +71,6 @@ def test_session_limit():
     
     if session_count <= MAX_SESSIONS_PER_USER:
         print("✅ Session limit test PASSED")
-        # Verify the latest sessions are kept
         if f"Test Session {num_sessions - 1}" in [s['title'] for s in sessions]:
             print("✅ Latest sessions are preserved")
         else:
@@ -90,26 +82,21 @@ def test_session_limit():
 
 
 def test_basic_operations():
-    """Test basic CRUD operations still work."""
     print("\n🧪 Testing basic CRUD operations...")
     
     user_id = f"test_user_{uuid.uuid4()}"
     session_id = f"test_session_{uuid.uuid4()}"
     
-    # Create session
     session = create_chat_session(user_id, session_id, "Basic Test")
     print("   ✅ Session created")
     
-    # Save message
     msg = save_message(session_id, f"msg_1_{uuid.uuid4()}", "user", "Hello")
     print("   ✅ Message saved")
     
-    # Retrieve sessions
     sessions = get_user_sessions(user_id)
     if len(sessions) > 0:
         print("   ✅ Sessions retrieved")
     
-    # Retrieve messages
     messages = get_session_messages(session_id)
     if len(messages) == 1 and messages[0]['content'] == "Hello":
         print("   ✅ Messages retrieved correctly")

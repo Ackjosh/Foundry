@@ -19,7 +19,6 @@ from chat_repository import (
 
 app = FastAPI(title="StratoGuide Chatbot with Chat History")
 
-# Initialize database on startup
 @app.on_event("startup")
 async def startup_event():
     try:
@@ -40,7 +39,6 @@ app.add_middleware(
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=4)
 
 
-# Request Models
 class QueryRequest(BaseModel):
     query: str
     user_id: str
@@ -57,19 +55,15 @@ class UpdateTitleRequest(BaseModel):
     title: str
 
 
-# Main chatbot endpoint with history saving
 @app.post("/chatbot")
 async def chatbot_endpoint(payload: QueryRequest):
     try:
-        # Save user message to database
         user_msg_id = str(uuid.uuid4())
         save_message(payload.session_id, user_msg_id, "user", payload.query)
         
-        # Get AI response
         loop = asyncio.get_running_loop()
         answer = await loop.run_in_executor(executor, get_strato_guide_answer, payload.query)
         
-        # Save assistant message to database
         ai_msg_id = str(uuid.uuid4())
         save_message(payload.session_id, ai_msg_id, "assistant", answer)
         
@@ -81,10 +75,8 @@ async def chatbot_endpoint(payload: QueryRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Chat history endpoints
 @app.get("/chat-history/{user_id}")
 async def get_chat_history(user_id: str):
-    """Get all chat sessions for a user."""
     try:
         sessions = get_user_sessions(user_id)
         return {"sessions": sessions}
@@ -94,7 +86,6 @@ async def get_chat_history(user_id: str):
 
 @app.get("/chat/{session_id}/messages")
 async def get_messages(session_id: str):
-    """Get all messages for a specific chat session."""
     try:
         messages = get_session_messages(session_id)
         return {"messages": messages}
@@ -104,7 +95,6 @@ async def get_messages(session_id: str):
 
 @app.get("/chat/{session_id}")
 async def get_session(session_id: str):
-    """Get a session with all its messages."""
     try:
         session = get_session_with_messages(session_id)
         if not session:
@@ -118,7 +108,6 @@ async def get_session(session_id: str):
 
 @app.post("/chat/new")
 async def create_new_chat(payload: NewChatRequest):
-    """Create a new chat session."""
     try:
         session = create_chat_session(payload.user_id, payload.session_id, payload.title)
         return {"session": session}
@@ -128,7 +117,6 @@ async def create_new_chat(payload: NewChatRequest):
 
 @app.delete("/chat/{session_id}")
 async def delete_chat(session_id: str, user_id: str = Query(...)):
-    """Delete a chat session (with user authorization)."""
     try:
         success = delete_session(session_id, user_id)
         if not success:
@@ -142,7 +130,6 @@ async def delete_chat(session_id: str, user_id: str = Query(...)):
 
 @app.put("/chat/{session_id}/title")
 async def update_title(session_id: str, payload: UpdateTitleRequest):
-    """Update the title of a chat session."""
     try:
         session = update_session_title(session_id, payload.title)
         if not session:

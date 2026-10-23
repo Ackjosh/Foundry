@@ -341,7 +341,7 @@ const Chatbot = () => {
             <ul className="space-y-2 italic">
               <li>RAG Engine Active</li>
               <li>ChromaDB Connected</li>
-              <li>Gemini-Flash 2.5</li>
+              <li>Gemini 1.0 Pro</li>
             </ul>
           </div>
         </div>
